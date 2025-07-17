@@ -1,4 +1,5 @@
-const Reminder = require("../models/Reminder");
+const Reminder = require("../models/reminder");
+const { sendReminderEmail } = require("../emailService"); // ✅ Add this line
 
 exports.getReminders = async (req, res) => {
   try {
@@ -14,13 +15,24 @@ exports.getReminders = async (req, res) => {
 exports.addReminder = async (req, res) => {
   try {
     const { title, date } = req.body;
+
     const reminder = await Reminder.create({
       userId: req.user.id,
       title,
       date,
     });
+
+    // ✅ Populate user email after creation
+    const populatedReminder = await reminder.populate("userId");
+
+    // ✅ Send email immediately (for demo)
+    await sendReminderEmail(populatedReminder.userId.email, [
+      populatedReminder,
+    ]);
+
     res.status(201).json(reminder);
   } catch (err) {
+    console.error("Error adding reminder:", err);
     res.status(400).json({ error: "Failed to add reminder" });
   }
 };

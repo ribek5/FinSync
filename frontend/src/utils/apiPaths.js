@@ -32,6 +32,6 @@ export const API_PATHS = {
   REMINDER: {
     ADD_REMINDER: "/api/v1/reminder/",
     GET_REMINDER: "/api/v1/reminder/",
-    GET_TODAY: "/api/v1/reminder/today",
+    GET_TODAY: "/api/v1/reminder/today/",
   },
 };

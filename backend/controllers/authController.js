@@ -11,10 +11,17 @@ exports.registerUser = async (req, res) => {
   const { fullName, email, password, profileImageUrl } = req.body;
 
   // Validation: Check for missing fields
-  if (!fullName || !email || !password) {
+  if (!fullName || !email || !password || !profileImageUrl) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
+  //Validate password length
+  if (password.length < 8) {
+    return res.status(400).json({
+      message: "Password must be at least 8 characters long",
+    });
+  }
+  
   try {
     // Check if email already exists
     const existingUser = await User.findOne({ email });

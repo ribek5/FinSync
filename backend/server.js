@@ -9,6 +9,8 @@ const expenseRoutes = require("./routes/expenseRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const budgetRoutes = require("./routes/budgetRoutes");
 const reminderRoutes = require("./routes/reminderRoutes");
+const cron = require("node-cron");
+const runDailyReminderJob = require("./dailyReminderJob");
 
 const app = express();
 
@@ -37,3 +39,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+cron.schedule("* 6 * * *", () => {
+  runDailyReminderJob();
+});
